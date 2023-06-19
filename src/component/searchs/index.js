@@ -33,6 +33,7 @@ const SearchPhotos = () => {
 
     useEffect(() => {
         if (!debounces.trim()) {
+            setResults([])
             return
         }
         const handleSearch = async () => {
