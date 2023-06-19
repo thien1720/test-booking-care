@@ -1,0 +1,36 @@
+.list-search{
+    margin: 10px auto ;
+    width: 400px;
+}
+input{
+    font-size: 18px;
+    border: 1px solid rgb(204 204 204) ;
+    border-radius: 40px 0 0 40px;
+    padding: 10px;
+    outline: none;
+}
+
+button{
+    padding: 10px;
+    border: 1px solid rgb(204 204 204) ;
+    border-radius: 0px 40px 40px 0;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.item-photo{
+    display: flex;
+    align-items: center;
+   
+    max-width: 400px;
+    margin: 10px auto;
+    border: 1px solid #ccc;
+    cursor: pointer;
+}
+img{
+    width: 100px;
+    margin-right: 10px;
+}
+h3{
+    font-size: 14px;
+}

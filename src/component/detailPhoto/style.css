@@ -1,0 +1,20 @@
+.detail-photos{
+    margin: 30px auto;
+    width: 400px;
+}
+
+.detail-photos img{
+    width: 100%;
+}
+.detail-photos p{
+    font-size: 18px;
+    color: #e5484d;
+}
+
+.go-back{
+    text-decoration: none;
+    padding: 10px;
+    background-color:#006adc;
+    border-radius: 8px;
+    color:#f1f3f5;
+}
