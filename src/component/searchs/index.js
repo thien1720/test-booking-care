@@ -9,21 +9,24 @@ import { Link } from 'react-router-dom';
 const SearchPhotos = () => {
     const [query, setQuery] = useState('');
     const [results, setResults] = useState([]);
-    const [page, setPage] = useState(1);
+    const [page, setPage] = useState(10);
     const debounces = useDeboune(query, 500)
-    console.log(debounces)
+
+    const [totalResult, setTotalResult] = useState(results.length)
     const [loading, setLoading] = useState(false);
     const [hasMore, setHasMore] = useState(true);
 
+    console.log(results)
     const getMorePost = async () => {
-        console.log("tos")
-        await setPage(page + 1)
-        const url = `https://jsonplaceholder.typicode.com/photos?q=${debounces}&_page=${page}&_limit=20`;
+        await setTotalResult(totalResult + 10)
+        const apiKey = 'AIzaSyBnTvzWPFc-QWTG7kV0izEDIRa6RDIumt0';
+        const cx = '40aa84b50e4a84ad1';
+        const url = `https://www.googleapis.com/customsearch/v1?key=${apiKey}&cx=${cx}&q=${debounces}&start=${totalResult}`
 
         axios.get(url)
             .then((response) => {
                 setLoading(false);
-                setResults((prevResults) => [...prevResults, ...response.data]);
+                setResults((prevResults) => [...prevResults, ...response.data.items]);
             })
             .catch((error) => {
                 console.error(error);
@@ -39,12 +42,25 @@ const SearchPhotos = () => {
         const handleSearch = async () => {
 
             // Thực hiện tìm kiếm khi người dùng nhập vào input
-            const url = `https://jsonplaceholder.typicode.com/photos?q=${debounces}&_page=${page}&_limit=20`;
+            const apiKey = 'AIzaSyBnTvzWPFc-QWTG7kV0izEDIRa6RDIumt0';
+            const cx = '40aa84b50e4a84ad1';
+            const url1 = `https://www.googleapis.com/customsearch/v1?key=${apiKey}&cx=${cx}&q=${debounces}`
+            const url2 = `https://www.googleapis.com/customsearch/v1?key=${apiKey}&cx=${cx}&q=${debounces}&start=${page}`
 
-            axios.get(url)
+
+            axios.get(url1)
                 .then((response) => {
                     setLoading(false);
-                    setResults((prevResults) => [...prevResults, ...response.data]);
+                    setResults((prevResults) => [...prevResults, ...response.data.items]);
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+
+            axios.get(url2)
+                .then((response) => {
+                    setLoading(false);
+                    setResults((prevResults) => [...prevResults, ...response.data.items]);
                 })
                 .catch((error) => {
                     console.error(error);
@@ -80,20 +96,27 @@ const SearchPhotos = () => {
                 endMessage={<h4>Nothing more to show</h4>}
             >
 
-                {results.map((photo) => (
-                    <Link to={`/photos/${photo.id}`}>
-                        <div key={photo.id} className={"item-photo"}>
-                            <img src={photo.thumbnailUrl} alt={photo.title} />
+                {results.map((photo) => {
+                    
+                    return <Link to={`/photos/${photo.title}`} key={photo.cacheId}>
+                        <div className={"item-photo"}>
+                            {photo.pagemap.cse_image.length ?
+                                <img src={photo.pagemap.cse_image[0].src} alt={photo.title} />
+                                : <img src="https://inkythuatso.com/uploads/thumbnails/800/2023/03/10-anh-dai-dien-trang-inkythuatso-03-15-27-10.jpg" alt={photo.title} />
+
+                            }
                             <div>
                                 <h3>{photo.title}</h3>
+                                <p>{photo.htmlTitle}</p>
                             </div>
                         </div>
                     </Link>
-                ))}
+                }
+                )}
             </InfiniteScroll>
                 : <h3 style={{ textAlign: "center" }}>Chưa có giá trị .</h3>
-                
-                }
+
+            }
 
         </div>
     );
